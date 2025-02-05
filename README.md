@@ -46,7 +46,7 @@ schema_scoring_api/
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/schema_scoring_api.git
+   git clone https://github.com/the-data-omni/schema_scoring_api.git
    cd schema_scoring_api
    ```
 
