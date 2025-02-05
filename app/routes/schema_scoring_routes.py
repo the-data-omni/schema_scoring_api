@@ -50,8 +50,9 @@ def score_schema():
         return jsonify(scores), 200
 
     except Exception as e: # pylint: disable=broad-exception-caught
+        app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({
             'error': 'Internal Server Error',
-            'message': str(e)
+            'message': 'An internal error has occurred. Please try again later.'
         }), 500
 
