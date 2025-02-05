@@ -1,6 +1,6 @@
 # Schema Scoring API
 
-A lightweight Flask API designed to compute and return a score based on a given schema description, with optional override weights for various scoring criteria. This repository can help you evaluate how closely your database schema will be understood by your users and how easily it will work with Generative AI models.
+A lightweight Flask API designed to compute and return a score for your database schema, with optional override weights for various scoring criteria. This repository can help you evaluate how closely your database schema will be understood by your users and how easily it will work with Generative AI models.
 
 ---
 
@@ -39,13 +39,6 @@ schema_scoring_api/
 - **`app/__init__.py`**: Initializes the Flask application.
 - **`run.py`**: Entry point for running the Flask development server.
 - **`requirements.txt`**: Lists all the Python dependencies needed.
-
----
-
-## Prerequisites
-
-- **Python 3.7+**  
-- **Git** (to clone the repository)
 
 ---
 
@@ -88,38 +81,37 @@ schema_scoring_api/
    
    By default, this will start the application on `http://127.0.0.1:5000`.
 
-2. **Send a POST request** with the following JSON structure to the appropriate endpoint.  
-   _For example, if the route is `/api/v1/score_schema`, you can do:_
+2. **Send a POST request** with the following JSON structure to the /score_schema endpoint.  
 
    ```bash
    curl -X POST -H "Content-Type: application/json" \
    -d '{
          "schema": [
            {
-             "table_catalog": "foreign-connect-48db5",
-             "table_schema": "ga4_dataform_seed",
-             "table_name": "non_custom_events",
-             "column_name": "sdf",
-             "field_path": "event_name",
-             "data_type": "STRING",
-             "description": "",
-             "collation_name": "NULL",
-             "rounding_mode": null,
-             "primary_key": false,
-             "foreign_key": false
+            "table_catalog": "project_name",
+            "table_schema": "dataset_name",
+            "table_name": "table_name",
+            "column_name": "column_name",
+            "field_path": "field_path",
+            "data_type": "STRING",
+            "description": "example description",
+            "collation_name": "NULL",
+            "rounding_mode": null,
+            "primary_key": boolean,
+            "foreign_key": boolean
            },
            {
-             "table_catalog": "foreign-connect-48db5",
-             "table_schema": "ga4_dataform_seed",
-             "table_name": "source_categories",
-             "column_name": "sdf",
-             "field_path": "source_category",
-             "data_type": "STRING",
-             "description": null,
-             "collation_name": "NULL",
-             "rounding_mode": null,
-             "primary_key": true,
-             "foreign_key": false
+            "table_catalog": "project_name",
+            "table_schema": "dataset_name",
+            "table_name": "table_name",
+            "column_name": "column_name",
+            "field_path": "field_path",
+            "data_type": "STRING",
+            "description": "example description",
+            "collation_name": "NULL",
+            "rounding_mode": null,
+            "primary_key": boolean,
+            "foreign_key": boolean  
            }
          ],
          "weights_override": {
@@ -129,10 +121,10 @@ schema_scoring_api/
            "field_types": 90,
            "keys_presence": 10
          }
-       }' http://127.0.0.1:5000/api/v1/score_schema
+       }' http://127.0.0.1:5000/score_schema
    ```
 
-3. **Review the response** which should contain a JSON object with a `score` field or similar, depending on implementation details.
+3. **Review the response**.
 
 ---
 
@@ -142,54 +134,34 @@ Below is the expected JSON payload format for scoring:
 
 ```json
 {
-  "schema": [
-    {
-      "table_catalog": "project_name",
-      "table_schema": "dataset_name",
-      "table_name": "table_name",
-      "column_name": "column_name",
-      "field_path": "field_path",
-      "data_type": "STRING",
-      "description": "example description",
-      "collation_name": "NULL",
-      "rounding_mode": null,
-      "primary_key": boolean,
-      "foreign_key": boolean
+    "Field Descriptions Score": 0.0,
+    "Field Descriptions Score (%)": 0.0,
+    "Field Name Similarity Score": 0.0,
+    "Field Name Similarity Score (%)": 0.0,
+    "Field Names Score": 0.0,
+    "Field Names Score (%)": 0.0,
+    "Field Types Score": 90.0,
+    "Field Types Score (%)": 100.0,
+    "Keys Presence Score": 2.5,
+    "Keys Presence Score (%)": 25.0,
+    "Penalized Fields": {
+        "NonMeaningful": [
+            "column_name"
+        ],
+        "NonMeaningful_NoDescription": [
+            "column_name"
+        ],
+        "Similar_Undifferentiated": [
+            "column_name"
+        ]
     },
-    {
-      "table_catalog": "project_name",
-      "table_schema": "dataset_name",
-      "table_name": "table_name",
-      "column_name": "column_name",
-      "field_path": "field_path",
-      "data_type": "STRING",
-      "description": "example description",
-      "collation_name": "NULL",
-      "rounding_mode": null,
-      "primary_key": boolean,
-      "foreign_key": boolean
-    }
-    // ... more schema entries
-  ],
-  "weights_override": {
-    "field_names": 30,
-    "field_descriptions": 25,
-    "field_name_similarity": 25,
-    "field_types": 10,
-    "keys_presence": 10
-  }
+    "Total Score": 92.5,
+    "Total Score (%)": 57.8125
 }
 ```
 
 - **`schema`** (required): A list of objects, each describing a table’s column.
 - **`weights_override`** (optional): Provides custom weights to adjust scoring criteria weights are percentage weights adding up to 100.
-
----
-
-## Logging
-
-- The application uses a basic logging configuration from `logging_config.py`.
-- Logs will appear in the console by default. Update the configuration for more advanced logging needs.
 
 ---
 
