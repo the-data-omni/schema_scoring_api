@@ -13,7 +13,6 @@ A lightweight Flask API designed to compute and return a score for your database
   - Field types
   - Presence of primary/foreign keys
 - **Customizable weights**: Override default weights for each criterion via the `weights_override` field.
-- **RESTful API**: Easily integrate with other services by sending a JSON payload.
 
 ---
 
